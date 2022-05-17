@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+
+
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Sofía tu asistente de ayuda virtual</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
+    <div class="row">
+        <div class="col-9">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-interval="3000">
+                        <img class="d-block w-100" src="./img/img2.jpg" alt="First slide">
+                    </div>
+                    <div class="carousel-item" data-interval="3000">
+                        <img class="d-block w-100" src="./img/img3.jpg" alt="Second slide">
+                    </div>
+                    <div class="carousel-item" data-interval="3000">
+                        <img class="d-block w-100" src="./img/img4.jpg" alt="Third slide">
+                    </div>
+                    <div class="carousel-item" data-interval="3000">
+                        <img class="d-block w-100" src="./img/img5.jpg" alt="Third slide">
+                    </div>
+                    <div class="carousel-item" data-interval="3000">
+                        <img class="d-block w-100" src="./img/img1.jpg" alt="Third slide">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container col-3 chat">
+            <div class="ps-container ps-theme-default ps-active-y" id="chat-content"
+                style="overflow-y: scroll !important; height:80vh !important;">
+                <div class="media media-chat"> <img class="avatar" src="./img/logo.png" alt="...">
+                    <div class="media-body">
+                        <p>Hola soy Sofía, tu asistente virtual </p>
+                        <p>Encantada de conocerte</p>
+                        <p>¿Cómo te encuentras el dia de hoy?</p>
+                    </div>
+                </div>
+                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                    <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                </div>
+                <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                    <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+                </div>
+            </div>
+            <form action="
+                                
+                                ">
+                <div class="publisher bt-1 border-light"> <img class="avatar avatar-xs"
+                        src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                    <input id="msg" class="publisher-input" type="text" placeholder="Escribe Algo"> <input
+                        class="publisher-btn text-info" type="submit">
+                </div>
+
+            </form>
+        </div>
+
+        <a class="BtnWsp"
+            href="https://api.whatsapp.com/send?phone=593678420542&text=Buenos%20d%C3%ADas,%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n"
+            target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+        <script>
+            let socket = io();
+            const form = document.querySelector('form');
+            const input = document.querySelector('input');
+            const contenedor = document.getElementById('chat-content');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault()
+                if (input.value ) {
+                    if (input.value.length < 50){
+                    socket.emit('chat', input.value)
+                    input.value = '';
+                    }
+                    else {
+                        alert("trata de poner respuestas mas cortas");
+                        input.value = '';
+                    }
+                }
+                else {
+                    alert("no debe mandar parametros vacios");
+                }
+            })
+
+            socket.on('chat', (msg) => {
+                const divi = document.createElement("div");
+                divi.className = "media media-chat media-chat-reverse";
+                contenedor.appendChild(divi);
+
+                const div2 = document.createElement("div");
+                div2.className = "media-body";
+                divi.appendChild(div2);
+
+                const text = document.createElement("p");
+                text.textContent = msg;
+                div2.appendChild(text);
+            })
+
+            socket.on('respose', (msg) => {
+                const divi = document.createElement("div");
+                divi.className = "media media-chat";
+                contenedor.appendChild(divi);
+
+                const img = document.createElement("img");
+                img.className = "avatar";
+                img.src = "./img/logo.png"
+                divi.appendChild(img);
+
+                const div2 = document.createElement("div");
+                div2.className = "media-body";
+                divi.appendChild(div2);
+
+                const text = document.createElement("p");
+                text.textContent = msg;
+                div2.appendChild(text);
+
+                contenedor.scroll(0, document.body.scrollHeight)
+            })
+
+            socket.on('respose2', (msg) => {
+                const divi = document.createElement("div");
+                divi.className = "media media-chat";
+                contenedor.appendChild(divi);
+
+                const img = document.createElement("img");
+                img.className = "avatar";
+                img.src = "./img/logo.png"
+                divi.appendChild(img);
+
+                const div2 = document.createElement("div");
+                div2.className = "media-body";
+                divi.appendChild(div2);
+
+                const text = document.createElement("p");
+                text.textContent = msg;
+                div2.appendChild(text);
+
+                contenedor.scroll(0, document.body.scrollHeight)
+            })
+
+        </script>
+</body>
+
+</html>
